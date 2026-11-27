@@ -1,0 +1,24 @@
+
+.env
+.env.*
+!.env.example
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+node_modules/
+dist/
+test-results/
+playwright-report/
+*.tsbuildinfo
+.idea/
+.vscode/
+/TZ.md
+/Архитектура.svg
+/Концепция продукта.png
+/предпочитаемая палитра.png
+/референс1вариант.jpg
+/референс2вариант.jpg
+/тех.стек.png

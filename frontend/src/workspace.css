@@ -1,0 +1,58 @@
+
+.workspace-nav { gap: .22rem; }
+.workspace-nav a { min-height: 42px; border-radius: 5px; }
+.workspace-nav a.active { box-shadow: inset 2px 0 var(--primary); }
+.sidebar-quota { display: grid; gap: .43rem; padding: .68rem; margin-bottom: .42rem;
+  background: var(--control); border: 1px solid var(--border); border-radius: 6px; color: var(--muted); }
+.sidebar-quota:hover { border-color: var(--border-strong); }
+.sidebar-quota > div { display: flex; align-items: center; gap: .48rem; font-size: .81rem; }
+.sidebar-quota svg { color: var(--link); }
+.sidebar-quota progress { width: 100%; height: 5px; display: block; appearance: none; }
+.sidebar-quota progress::-webkit-progress-bar { background: var(--border-strong); border-radius: 4px; }
+.sidebar-quota progress::-webkit-progress-value { background: var(--primary); border-radius: 4px; }
+.sidebar-quota progress::-moz-progress-bar { background: var(--primary); border-radius: 4px; }
+.sidebar-quota small { font-size: .74rem; }
+.workspace-header { background: var(--bg); }
+
+.workspace-brief { position: relative; isolation: isolate; overflow: hidden; min-height: 190px; display: grid;
+  align-content: center; gap: 1.1rem; padding: 1.45rem clamp(1rem, 3vw, 1.85rem); border: 1px solid var(--border-strong);
+  background: linear-gradient(115deg, var(--panel) 30%, color-mix(in srgb, var(--primary) 13%, var(--panel)));
+  border-radius: 8px; }
+.workspace-brief::before, .workspace-brief::after { content: ''; position: absolute; z-index: -1; pointer-events: none; }
+.workspace-brief::before { right: 5%; top: -29%; width: 43%; height: 154%; transform: skewX(-27deg);
+  border: 1px solid color-mix(in srgb, var(--primary) 38%, transparent);
+  box-shadow: 24px 14px 0 -1px var(--bg), 25px 15px color-mix(in srgb, var(--primary) 33%, transparent),
+    49px 29px 0 -1px var(--bg), 50px 30px color-mix(in srgb, var(--primary) 28%, transparent);
+  background: repeating-linear-gradient(180deg, transparent 0 26px, color-mix(in srgb, var(--primary) 17%, transparent) 26px 27px);
+  mask-image: linear-gradient(90deg, transparent, #000 49%); opacity: .77; }
+.workspace-brief::after { top: 47%; right: 0; width: 41%; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--primary)); box-shadow: 0 0 17px #6366f19c; }
+.workspace-brief h1 { font-size: clamp(2rem, 4.1vw, 2.65rem); }
+.brief-label { display: flex; gap: .44rem; align-items: center; color: var(--link);
+  font-weight: 630; font-size: .83rem; margin-bottom: .39rem; }
+.brief-actions { display: flex; flex-wrap: wrap; gap: .42rem; }
+.dashboard .stats-grid { gap: 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.dashboard .stat { border-width: 0 1px 0 0; border-radius: 0; padding: .94rem 1.02rem; }
+.dashboard .stat:last-child { border-right: 0; }
+.dashboard .stat strong { font-variant-numeric: tabular-nums; }
+.panel { border-radius: 8px; }
+.panel-heading { min-height: 61px; }
+.chat-source { background: color-mix(in srgb, var(--primary) 5%, var(--sidebar)); }
+.source-content blockquote { border-left-width: 3px; border-radius: 0 5px 5px 0; }
+.citation[aria-pressed='true'], .inline-citation[aria-pressed='true'] { color: var(--text); border-color: var(--primary); }
+.inline-citation { vertical-align: baseline; display: inline-grid; place-items: center; min-width: 1.4em; min-height: 1.35em;
+  margin-inline: .15em; padding-inline: .2em; color: var(--link); border: 1px solid color-mix(in srgb,var(--primary) 42%,var(--border));
+  border-radius: 3px; background: var(--tint); font-size: .79em; font-weight: 640; }
+.inline-citation:hover { border-color: var(--primary); }
+.auth-page { background: linear-gradient(135deg, var(--bg) 35%, color-mix(in srgb,var(--primary) 12%,var(--bg))); }
+.auth-card { border-radius: 8px; border-top: 2px solid var(--primary); }
+@media (max-width: 920px) {
+  .dashboard .stat:nth-child(2) { border-right: 0; }
+  .dashboard .stat:nth-child(-n+2) { border-bottom-width: 1px; }
+}
+@media (max-width: 760px) {
+  .workspace-header .button-icon { min-height: 44px; width: 44px; }
+  .workspace-brief::before { opacity: .35; }
+  .workspace-brief { min-height: 172px; }
+  .modal .button, .actions .button, .chat-composer .button { min-height: 44px; }
+}

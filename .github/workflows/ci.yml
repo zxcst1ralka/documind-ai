@@ -1,0 +1,88 @@
+
+name: DocuMind AI CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - run: npm audit --audit-level=moderate
+
+  compose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      COMPOSE_PROJECT_NAME: documind-ai-test
+      COMPOSE_FILE: compose.yaml:compose.test.yaml
+      COMPOSE_PROFILES: tests
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Configure isolated stack
+        run: sh scripts/init-env.sh
+      - name: Build and check readiness
+        run: |
+          docker compose up --build -d --wait --wait-timeout 160 nginx celery-worker
+          curl --fail --retry 4 http://localhost:8081/api/v1/ready
+      - name: Apply and verify migrations
+        run: docker compose exec -T backend alembic check
+      - name: Build backend test image
+        run: docker compose build backend-tests
+      - name: Backend lint
+        run: docker compose run --rm --no-deps backend-tests ruff check . --no-cache
+      - name: Backend tests
+        run: docker compose run --rm --no-deps backend-tests
+      - name: Python dependencies
+        run: |
+          docker compose run --rm --no-deps backend-tests pip-audit --progress-spinner off --cache-dir /tmp/pip-audit
+          docker compose run --rm --no-deps backend-tests sh -c '
+            python -c "from importlib.metadata import version; from packaging.version import Version; print(\"torch==\" + Version(version(\"torch\")).public)" > /tmp/documind-torch.txt
+            pip-audit --progress-spinner off --cache-dir /tmp/pip-audit --no-deps --disable-pip -r /tmp/documind-torch.txt
+          '
+      - name: Playwright
+        working-directory: frontend
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+          npm run e2e
+      - name: Diagnostics on failure
+        if: failure()
+        run: docker compose logs --tail 50 postgres backend celery-worker nginx
+      - name: Stop isolated stack
+        if: always()
+        run: docker compose down -v --remove-orphans
+
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - run: >
+          docker run --rm -v "$GITHUB_WORKSPACE:/repo:ro"
+          -e GIT_CONFIG_COUNT=1 -e GIT_CONFIG_KEY_0=safe.directory -e GIT_CONFIG_VALUE_0=/repo
+          zricethezav/gitleaks:v8.30.1 git --redact /repo

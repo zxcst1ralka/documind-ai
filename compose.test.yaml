@@ -1,0 +1,48 @@
+
+x-test-env: &test-env
+  ENVIRONMENT: test
+  APP_ORIGIN: http://localhost:8081
+  DATABASE_NAME: documind_test
+  MINIO_BUCKET: documind-test
+  AI_PROVIDER: mock
+  AI_EXTERNAL: false
+  EMBEDDING_TEST_MODE: true
+  RELEVANCE_THRESHOLD: 0.15
+  MAX_FILE_MB: 1
+  MAX_AI_DAILY: 8
+
+services:
+  postgres:
+    environment:
+      POSTGRES_DB: documind_test
+
+  backend:
+    environment: *test-env
+
+  celery-worker:
+    environment: *test-env
+
+  migrate:
+    environment: *test-env
+
+  minio-init:
+    environment: *test-env
+
+  nginx:
+    ports: !override ["127.0.0.1:8081:8080"]
+
+  backend-tests:
+    profiles: [tests]
+    image: documind-ai-tests:local
+    build:
+      context: ./backend
+      target: test
+    env_file: .env
+    environment:
+      <<: *test-env
+      DOCUMIND_TEST_API: http://backend:8000
+    networks: [private, egress]
+    depends_on:
+      backend: {condition: service_healthy}
+      celery-worker: {condition: service_started}
+    command: ["python", "-m", "pytest", "-q"]
