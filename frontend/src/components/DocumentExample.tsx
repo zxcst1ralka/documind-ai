@@ -24,17 +24,18 @@ export default function DocumentExample({ selected, revealed, onSelect, onReveal
       <p>Выберите вопрос и откройте источник в вымышленном договоре.</p></div>
     <div className="example-grid">
       <div className="example-console">
-        <div className="example-caption"><Sparkles size={17} /> Ответ по документу</div>
-        <div className="example-choices" aria-label="Вопросы по договору">{clauses.map((clause, index) =>
+        <div className="example-caption">Вопросы по договору</div>
+        <div className="example-choices" role="group" aria-label="Вопросы по договору">{clauses.map((clause, index) =>
           <button type="button" key={clause.section} aria-pressed={selected === index}
             onClick={() => onSelect(index)}>{clause.tab}</button>)}</div>
-        <div className="example-reply" aria-live="polite">
-          <p>{active.question}</p><strong>{active.answer}</strong>
-          <Button size="sm" onClick={() => onReveal(!revealed)}
-            aria-controls="example-document" aria-pressed={revealed}>
-            <Quote size={16} /> {revealed ? 'Скрыть подсветку' : 'Показать источник'} · п. {active.section}
-          </Button>
-        </div>
+      </div>
+      <div className="example-reply" aria-live="polite">
+        <div className="example-caption"><Sparkles size={17} /> Ответ по документу</div>
+        <p>{active.question}</p><strong>{active.answer}</strong>
+        <Button className="example-citation" variant="ghost" onClick={() => onReveal(!revealed)}
+          aria-controls="example-document" aria-pressed={revealed}>
+          <Quote size={16} /> {revealed ? 'Скрыть подсветку' : 'Показать источник'} · п. {active.section}
+        </Button>
       </div>
       <div className="example-document" id="example-document">
         <div className="example-doc-title"><FileText size={17} /> Договор оказания услуг <span>Вымышленный</span></div>

@@ -1,6 +1,6 @@
 
-import { BookOpen, Check, ChevronDown, FileCheck2, GitCompareArrows, LibraryBig, LockKeyhole,
-  MessageSquareText, ScanLine, ScanSearch, ShieldCheck, Upload, Workflow } from 'lucide-react'
+import { BookOpen, Check, ChevronDown, DoorOpen, FileCheck2, GitCompareArrows, LibraryBig, LockKeyhole,
+  MessageSquareText, Quote, ScanLine, ScanSearch, ShieldCheck, Upload, Workflow } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router'
 import DocumentExample from '../components/DocumentExample'
@@ -36,27 +36,28 @@ export default function Landing() {
       <Brand />
       <nav aria-label="Разделы сайта"><a href="#example">Пример</a><a href="#features">Возможности</a><a href="#faq">Вопросы</a></nav>
       <div className="landing-actions"><ThemeToggle />
-        {user ? <Button asChild variant="primary" size="sm"><Link to="/app">В кабинет</Link></Button> :
-          <Button asChild variant="secondary" size="sm"><Link to="/login">Войти</Link></Button>}
+        <Link className="landing-account" to={user ? '/app' : '/login'}><DoorOpen size={16} />
+          {user ? 'В кабинет' : 'Войти'}</Link>
       </div>
     </div></header>
     <main>
       <section className="hero"><div className="landing-wrap hero-grid">
         <div className="hero-content">
           <div className="section-label"><ScanLine size={18} /> AI для работы с документами</div>
-          <h1>Ваши документы.<br /><em>Ваш искусственный интеллект</em></h1>
+          <h1><span>Ваши документы.</span><em>Ваш искусственный интеллект</em></h1>
           <p>Задавайте вопросы по своим файлам, находите важные условия и открывайте точную цитату прямо из ответа.</p>
-          <div className="hero-actions">
-            <Button variant="primary" asChild><Link to={entry}>{user ? 'Открыть кабинет' : 'Создать аккаунт'}</Link></Button>
-            <Button variant="ghost" asChild><a href="#example"><BookOpen size={17} /> Посмотреть пример</a></Button>
-          </div>
+          <Link className="hero-entry" to={entry}><span className="hero-entry-icon"><DoorOpen size={23} /></span>
+            <strong>{user ? 'Открыть кабинет' : 'Создать аккаунт'}</strong>
+          </Link>
         </div>
-        <figure className="hero-art">
-          <img className="hero-image" src="/document-optics.webp" width="1440" height="960" alt="" fetchPriority="high" />
+        <div className="hero-art">
+          <div className="hero-media"><img className="hero-image" src="/archive-optics.webp" width="1440" height="960" alt="" fetchPriority="high" /></div>
           <a className="hero-source-link" href="#example" onClick={() => { setSelected(0); setRevealed(true) }}>
-            <QuoteSymbol /><span><strong>10 рабочих дней</strong>
-            <small>Договор оказания услуг · п. 3.1</small></span><ChevronDown size={17} /></a>
-        </figure>
+            <span className="hero-quote-mark"><Quote size={20} /></span><span><strong>10 рабочих дней</strong>
+            <small>Договор оказания услуг · п. 3.1</small></span>
+            <span className="hero-source-action">Открыть пример</span>
+          </a>
+        </div>
       </div></section>
 
       <DocumentExample selected={selected} revealed={revealed}
@@ -104,8 +105,4 @@ export default function Landing() {
     <footer className="landing-footer"><div className="landing-wrap"><Brand /><span>Портфельный проект</span>
       <a href="/api/v1/docs">Документация API</a></div></footer>
   </div>
-}
-
-function QuoteSymbol() {
-  return <span className="hero-quote-mark" aria-hidden="true">“</span>
 }

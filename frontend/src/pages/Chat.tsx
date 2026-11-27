@@ -223,10 +223,12 @@ export default function ChatPage() {
   const chats = useQuery({ queryKey: ['chats'], queryFn: () => api<Chat[]>('/chats') })
   const picker = params.has('new') || params.has('document')
   return <div className="screen chat-screen">
-    <div className="page-heading"><div><h1>AI-чат</h1><p>Вопросы по библиотеке и проверяемые источники.</p></div>
-      {!user?.read_only && <Button variant="primary" onClick={() => setParams({ new: '1' })}><Plus size={17} /> Новый чат</Button>}</div>
+    <div className="page-heading"><div><h1>AI-чат</h1><p>Вопросы по библиотеке и проверяемые источники.</p></div></div>
     <div className="panel chat-layout">
       <aside className="chat-history"><div className="panel-heading"><h2>История</h2></div>
+        {!user?.read_only && <div className="chat-history-action">
+          <Button variant="primary" onClick={() => setParams({ new: '1' })}><Plus size={17} /> Новый чат</Button>
+        </div>}
         {chats.isLoading && <Skeleton count={2} />}
         {chats.error && <ErrorNotice message={chats.error.message} />}
         {chats.data?.length === 0 && <p className="sidebar-empty">Диалогов пока нет</p>}
@@ -237,8 +239,7 @@ export default function ChatPage() {
       </aside>
       {id ? <Conversation key={id} id={id} /> : <div className="chat-main chat-empty">
         <Empty icon={<MessageSquareText size={27} />} title="Выберите чат или начните новый"
-          body="DocuMind AI найдёт подходящие фрагменты и покажет ссылки на источники."
-          action={!user?.read_only && <Button onClick={() => setParams({ new: '1' })}><Plus size={16} /> Создать чат</Button>} /></div>}
+          body="DocuMind AI найдёт подходящие фрагменты и покажет ссылки на источники." /></div>}
     </div>
     {picker && !user?.read_only && <ChatPicker initial={params.get('document')} onClose={() => setParams({})}
       onSuccess={chatId => navigate('/app/chat/' + chatId)} />}

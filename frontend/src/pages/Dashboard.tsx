@@ -1,5 +1,5 @@
 
-import { Activity, ArrowUpRight, CircleCheck, FileText, GitCompareArrows, HardDrive, MessageSquareText, ScanLine, Upload } from 'lucide-react'
+import { Activity, CircleCheck, FileText, GitCompareArrows, HardDrive, MessageSquareText, ScanLine, Upload } from 'lucide-react'
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { Link } from 'react-router'
 import { Badge, Button, Empty, ErrorNotice, FileIcon, Skeleton } from '../components/ui'
@@ -12,15 +12,22 @@ export default function Dashboard() {
   const summary = useSummary()
   const data = summary.data
   return <div className="screen dashboard">
-    <section className="workspace-brief">
-      <div className="page-heading"><div><span className="brief-label"><ScanLine size={16} /> Личная библиотека</span><h1>Обзор</h1>
-        <p>Документы, диалоги и активность вашей библиотеки.</p></div></div>
-      <div className="brief-actions">
-        {!user?.read_only && <Button variant="primary" asChild><Link to="/app/documents?upload=1"><Upload size={17} /> Загрузить документы</Link></Button>}
-        <Button asChild><Link to="/app/chat"><MessageSquareText size={16} /> Открыть AI-чат</Link></Button>
-        <Button asChild variant="ghost"><Link to="/app/compare"><GitCompareArrows size={16} /> Сравнить версии</Link></Button>
-      </div>
-    </section>
+    <div className="overview-intro">
+      <section className="workspace-brief">
+        <div className="page-heading"><div><span className="brief-label"><ScanLine size={16} /> Личная библиотека</span><h1>Обзор</h1>
+          <p>Документы, диалоги и активность вашей библиотеки.</p></div></div>
+      </section>
+      <nav className="brief-actions" aria-label="Быстрые действия">
+        {!user?.read_only && <Link className="brief-upload" to="/app/documents?upload=1">
+          <span className="brief-action-icon"><Upload size={21} /></span>
+          <span><strong>Загрузить документы</strong><small>PDF, DOCX, TXT и таблицы</small></span>
+        </Link>}
+        <div className="brief-secondary">
+          <Link to="/app/chat"><MessageSquareText size={16} /> Открыть AI-чат</Link>
+          <Link to="/app/compare"><GitCompareArrows size={16} /> Сравнить версии</Link>
+        </div>
+      </nav>
+    </div>
     {summary.isLoading && <Skeleton count={5} />}
     {summary.error && <ErrorNotice message={summary.error.message} retry={() => summary.refetch()} />}
     {data && <>
@@ -53,7 +60,7 @@ export default function Dashboard() {
           </div>
         </section>
         <section className="panel chat-card"><div className="panel-heading"><div><h2><MessageSquareText size={18} /> Последние чаты</h2>
-          <p>Продолжите работу с источниками</p></div><Link to="/app/chat" aria-label="Все чаты"><ArrowUpRight size={18} /></Link></div>
+          <p>Продолжите работу с источниками</p></div><Link to="/app/chat">Все чаты</Link></div>
           {data.recent_chats.length ? <div className="recent-chats">{data.recent_chats.map(chat =>
             <Link key={chat.id} to={'/app/chat/' + chat.id}><MessageSquareText size={16} /><span>{chat.title}</span>
               <small>{formatDate(chat.created_at)}</small></Link>)}</div> :
@@ -63,7 +70,7 @@ export default function Dashboard() {
         </section>
       </div>
       <section className="panel"><div className="panel-heading"><div><h2><FileText size={18} /> Последние документы</h2></div>
-        <Button asChild variant="ghost" size="sm"><Link to="/app/documents">Вся библиотека <ArrowUpRight size={15} /></Link></Button></div>
+        <Button asChild variant="ghost" size="sm"><Link to="/app/documents">Вся библиотека</Link></Button></div>
         {data.recent_documents.length ? <div className="recent-docs">{data.recent_documents.map(doc =>
           <Link key={doc.id} to={'/app/documents/' + doc.id}><FileIcon extension={doc.extension} />
             <strong>{doc.name}</strong><small>{formatBytes(doc.size)}</small><Badge status={doc.status} /></Link>)}</div> :

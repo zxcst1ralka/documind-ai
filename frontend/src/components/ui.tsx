@@ -82,6 +82,7 @@ export function UIProvider({ children }: { children: ReactNode }) {
   const [toast, setToast] = useState<{ message: string; isError: boolean; stamp: number } | null>(null)
   useEffect(() => {
     document.documentElement.dataset.theme = theme
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#101915' : '#f3f5ee')
     localStorage.setItem('documind-theme', theme)
   }, [theme])
   useEffect(() => {

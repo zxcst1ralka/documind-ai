@@ -79,9 +79,11 @@ try {
   await shot('dashboard')
   assert.deepEqual(errors, [])
 
-  const mobile = await browser.newPage({ baseURL, viewport: { width: 390, height: 844 }, isMobile: true, deviceScaleFactor: 1 })
+  const mobile = await browser.newPage({ baseURL, viewport: { width: 390, height: 844 },
+    isMobile: true, deviceScaleFactor: 1, reducedMotion: 'reduce' })
   await mobile.goto('/')
   await mobile.locator('.hero-image').evaluate(img => img.decode())
+  await mobile.evaluate(() => globalThis.document.fonts.ready)
   await mobile.screenshot({ path: join(screenshots, 'mobile.png') })
   log('Captured live frontend, real source, and PDF preview.')
   log('GIF frames: ' + frames)

@@ -14,31 +14,53 @@
 .sidebar-quota small { font-size: .74rem; }
 .workspace-header { background: var(--bg); }
 
-.workspace-brief { position: relative; isolation: isolate; overflow: hidden; min-height: 190px; display: grid;
-  align-content: center; gap: 1.1rem; padding: 1.45rem clamp(1rem, 3vw, 1.85rem); border: 1px solid var(--border-strong);
-  background: linear-gradient(115deg, var(--panel) 30%, color-mix(in srgb, var(--primary) 13%, var(--panel)));
-  border-radius: 8px; }
+.overview-intro { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(255px, 1fr); gap: 1rem; }
+.workspace-brief { position: relative; isolation: isolate; overflow: hidden; min-height: 199px; display: grid;
+  align-content: center; padding: 1.55rem clamp(1rem, 3vw, 1.9rem); border: 1px solid var(--border);
+  background: var(--panel); border-radius: 8px; }
 .workspace-brief::before, .workspace-brief::after { content: ''; position: absolute; z-index: -1; pointer-events: none; }
-.workspace-brief::before { right: 5%; top: -29%; width: 43%; height: 154%; transform: skewX(-27deg);
-  border: 1px solid color-mix(in srgb, var(--primary) 38%, transparent);
-  box-shadow: 24px 14px 0 -1px var(--bg), 25px 15px color-mix(in srgb, var(--primary) 33%, transparent),
-    49px 29px 0 -1px var(--bg), 50px 30px color-mix(in srgb, var(--primary) 28%, transparent);
-  background: repeating-linear-gradient(180deg, transparent 0 26px, color-mix(in srgb, var(--primary) 17%, transparent) 26px 27px);
-  mask-image: linear-gradient(90deg, transparent, #000 49%); opacity: .77; }
-.workspace-brief::after { top: 47%; right: 0; width: 41%; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--primary)); box-shadow: 0 0 17px #6366f19c; }
-.workspace-brief h1 { font-size: clamp(2rem, 4.1vw, 2.65rem); }
+.workspace-brief::before { right: -7%; top: 27%; width: 46%; height: 122%; transform: rotate(-26deg);
+  border: 1px solid var(--border-strong); border-radius: 7px; background: var(--tint);
+  box-shadow: 12px -13px 0 -1px var(--panel), 13px -14px var(--border-strong),
+    25px -26px 0 -1px var(--panel), 26px -27px var(--border-strong); opacity: .65; }
+.workspace-brief::after { top: 60%; right: 0; width: 39%; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent)); }
+.workspace-brief h1 { font-size: clamp(1.92rem, 3.9vw, 2.7rem); }
+.workspace-brief .page-heading p { max-width: 32ch; }
 .brief-label { display: flex; gap: .44rem; align-items: center; color: var(--link);
   font-weight: 630; font-size: .83rem; margin-bottom: .39rem; }
-.brief-actions { display: flex; flex-wrap: wrap; gap: .42rem; }
+.brief-actions { display: grid; align-content: stretch; min-width: 0; gap: .55rem; }
+.brief-upload { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: .78rem; min-height: 76px;
+  padding: .68rem .8rem; border-radius: 6px; background: var(--primary-solid); color: var(--on-primary);
+  transition: background .18s; }
+.brief-upload:hover { background: var(--primary-hover); }
+.brief-action-icon { display: grid; place-items: center; min-width: 43px; min-height: 43px; border-radius: 4px;
+  border: 1px solid color-mix(in srgb, var(--on-primary) 42%, var(--primary-solid)); }
+.brief-upload strong, .brief-upload small { display: block; }
+.brief-upload strong { font-size: .95rem; font-weight: 790; }
+.brief-upload small { font-size: .81rem; }
+.brief-secondary { display: grid; align-content: center; border: 1px solid var(--border); border-radius: 6px; background: var(--panel); }
+.brief-secondary > a { display: flex; align-items: center; gap: .58rem; min-height: 44px; padding: .5rem .8rem;
+  color: var(--text); font-size: .89rem; font-weight: 670; }
+.brief-secondary > a + a { border-top: 1px solid var(--border); }
+.brief-secondary > a:hover { color: var(--link); background: var(--raised); }
+.brief-secondary > a > svg { color: var(--link); }
 .dashboard .stats-grid { gap: 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
 .dashboard .stat { border-width: 0 1px 0 0; border-radius: 0; padding: .94rem 1.02rem; }
 .dashboard .stat:last-child { border-right: 0; }
 .dashboard .stat strong { font-variant-numeric: tabular-nums; }
 .panel { border-radius: 8px; }
 .panel-heading { min-height: 61px; }
+.document-question { display: flex; align-items: center; gap: .53rem; width: fit-content;
+  margin: .85rem 1.06rem; padding: .55rem .85rem; min-height: 44px; border-radius: 5px;
+  font-size: .89rem; font-weight: 770; color: var(--on-primary); background: var(--primary-solid);
+  transition: background .18s; }
+.document-question:hover { background: var(--primary-hover); }
+.doc-btns { border-top: 1px solid var(--border); margin-inline: .85rem; padding: .72rem 0 .85rem; }
+.doc-btns .button { justify-content: flex-start; }
+.chat-history-action { padding: .65rem .55rem .3rem; }
+.chat-history-action .button { width: 100%; min-height: 44px; }
 .chat-source { background: color-mix(in srgb, var(--primary) 5%, var(--sidebar)); }
-.source-content blockquote { border-left-width: 3px; border-radius: 0 5px 5px 0; }
 .citation[aria-pressed='true'], .inline-citation[aria-pressed='true'] { color: var(--text); border-color: var(--primary); }
 .inline-citation { vertical-align: baseline; display: inline-grid; place-items: center; min-width: 1.4em; min-height: 1.35em;
   margin-inline: .15em; padding-inline: .2em; color: var(--link); border: 1px solid color-mix(in srgb,var(--primary) 42%,var(--border));
@@ -55,4 +77,15 @@
   .workspace-brief::before { opacity: .35; }
   .workspace-brief { min-height: 172px; }
   .modal .button, .actions .button, .chat-composer .button { min-height: 44px; }
+}
+@media (max-width: 620px) {
+  .overview-intro { grid-template-columns: minmax(0, 1fr); gap: .7rem; }
+  .workspace-brief { min-height: 145px; }
+  .brief-actions { gap: .45rem; }
+}
+@media (max-width: 580px) {
+  .chat-history { display: grid; grid-template-columns: minmax(0, 1fr) auto; }
+  .chat-history .panel-heading { border-bottom: 0; }
+  .chat-history > :not(.panel-heading, .chat-history-action) { grid-column: 1 / -1; }
+  .chat-history-action { padding: .4rem .45rem; }
 }

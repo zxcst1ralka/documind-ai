@@ -1,7 +1,6 @@
 
-import '@fontsource-variable/inter'
-import '@fontsource/pt-serif/cyrillic-400-italic.css'
-import '@fontsource/pt-serif/cyrillic-700.css'
+import '@fontsource-variable/manrope'
+import '@fontsource-variable/unbounded'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { StrictMode, lazy, Suspense } from 'react'
 import { createRoot } from 'react-dom/client'

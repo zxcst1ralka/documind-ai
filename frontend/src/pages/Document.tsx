@@ -89,16 +89,16 @@ export default function DocumentPage() {
   return <div className="screen">
     <Link className="back-link" to="/app/documents"><ChevronLeft size={16} /> Документы</Link>
     <div className="page-heading doc-heading"><div><div className="file-title"><FileIcon extension={doc.extension} /><h1>{doc.name}</h1></div>
-      <p>{doc.extension.toUpperCase()} · {formatBytes(doc.size)} · {formatDate(doc.created_at)}{doc.page_count ? ' · Страниц: ' + doc.page_count : ''}</p></div>
-      <div className="actions"><Button onClick={saveOriginal} disabled={downloading}>{downloading ? <Spinner /> : <Download size={16} />} Оригинал</Button>
-        {!user?.read_only && doc.status === 'ready' && <Button asChild variant="primary"><Link to={'/app/chat?document=' + id}><MessageSquareText size={16} /> Задать вопрос</Link></Button>}
-      </div></div>
+      <p>{doc.extension.toUpperCase()} · {formatBytes(doc.size)} · {formatDate(doc.created_at)}{doc.page_count ? ' · Страниц: ' + doc.page_count : ''}</p></div></div>
     <div className="doc-grid">
       <section className="panel document-reader"><div className="panel-heading"><h2><FileText size={17} /> Содержимое</h2>
         {doc.extension === 'pdf' && <div className="segmented">
           <button aria-pressed={pdf} onClick={() => setParams({ page: String(page) })}>PDF</button>
           <button aria-pressed={!pdf} onClick={() => setParams({ view: 'text' })}>Текст</button>
         </div>}</div>
+        {!user?.read_only && doc.status === 'ready' && <Link className="document-question" to={'/app/chat?document=' + id}>
+          <MessageSquareText size={17} /> Задать вопрос
+        </Link>}
         {pdf ? blob.error ? <ErrorNotice message={blob.error.message} /> : pdfUrl ? <Suspense fallback={<Skeleton />}>
           <PdfPreview file={pdfUrl} page={page} setPage={n => setParams({ page: String(n) })} />
         </Suspense> : <Skeleton /> : doc.status !== 'ready' ? <Empty title={doc.status === 'failed' ? 'Не удалось обработать документ' : 'Текст ещё обрабатывается'}
@@ -110,11 +110,14 @@ export default function DocumentPage() {
           {doc.ocr_page_count > 0 && <><dt>Распознано через OCR</dt><dd>Страниц: {doc.ocr_page_count}</dd></>}
           <dt>Теги</dt><dd>{doc.tags.length ? <div className="chips">{doc.tags.map(tag => <span key={tag}>{tag}</span>)}</div> : '—'}</dd></dl>
         {doc.error && <ErrorNotice message={doc.error} />}
-        {!user?.read_only && <div className="doc-btns">
-          {doc.status === 'failed' && <Button size="sm" onClick={() => reprocess.mutate()} disabled={reprocess.isPending}><RefreshCw size={16} /> Повторить обработку</Button>}
-          <Button size="sm" onClick={() => setEditing(true)}><Pencil size={15} /> Редактировать</Button>
-          <Button size="sm" variant="ghost" onClick={() => setDeleting(true)}><Trash2 size={15} /> Удалить документ</Button>
-        </div>}
+        <div className="doc-btns">
+          <Button size="sm" onClick={saveOriginal} disabled={downloading}>{downloading ? <Spinner /> : <Download size={16} />} Скачать оригинал</Button>
+          {!user?.read_only && <>
+            {doc.status === 'failed' && <Button size="sm" onClick={() => reprocess.mutate()} disabled={reprocess.isPending}><RefreshCw size={16} /> Повторить обработку</Button>}
+            <Button size="sm" variant="ghost" onClick={() => setEditing(true)}><Pencil size={15} /> Редактировать</Button>
+            <Button size="sm" variant="ghost" onClick={() => setDeleting(true)}><Trash2 size={15} /> Удалить документ</Button>
+          </>}
+        </div>
       </aside>
     </div>
     {editing && <EditDocument doc={doc} onClose={() => setEditing(false)} />}

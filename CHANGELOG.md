@@ -1,6 +1,14 @@
 
 # Changelog
 
+## Unreleased
+
+- Redesigned the landing page and workspace with a forest and copper palette,
+  Cyrillic Manrope and Unbounded, and distinct entry points for upload and citations.
+- Refreshed the portfolio screenshots and walkthrough GIF.
+- Rechecked the implementation against the portfolio requirements and recorded
+  implementation differences in the verification report.
+
 ## 1.1.0
 
 - Added local Russian and English OCR for scanned PDF pages, including
